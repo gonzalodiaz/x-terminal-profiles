@@ -30,9 +30,9 @@ def main() -> None:
     p = sub.add_parser("shell", help="Launch isolated shell with profile environment")
     p.add_argument("name", help="Profile name")
 
-    # xtp show <name>
+    # xtp show [name]
     p = sub.add_parser("show", help="Show profile config and environment variables")
-    p.add_argument("name", help="Profile name")
+    p.add_argument("name", nargs="?", help="Profile name (defaults to active profile)")
 
     # xtp edit <name>
     p = sub.add_parser("edit", help="Open profile.toml in $EDITOR")
@@ -79,8 +79,13 @@ def main() -> None:
         run(args.name)
 
     elif args.command == "show":
+        name = args.name or os.environ.get("XTP_PROFILE")
+        if not name:
+            print("Error: no profile name given and not inside an xtp shell.", file=sys.stderr)
+            print("Usage: xtp show <name>  or run from inside an xtp shell.", file=sys.stderr)
+            raise SystemExit(1)
         from xtp.commands.show import run
-        run(args.name)
+        run(name)
 
     elif args.command == "edit":
         from xtp.commands.edit import run
