@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 
-from tp import config
+from xtp import config
 
 
 def run(name: str) -> None:

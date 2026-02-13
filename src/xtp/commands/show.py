@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from tp import config
+from xtp import config
 
 
 def run(name: str) -> None:

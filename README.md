@@ -1,4 +1,4 @@
-# tp - Terminal Profiles
+# xtp - Terminal Profiles
 
 Terminal profile manager for multi-client environment isolation. Switch between clients/identities with fully isolated Git, GitHub, Claude Code, Chrome, AWS, and npm configs in a single command.
 
@@ -12,36 +12,36 @@ As a consultant or developer working with multiple clients, you constantly juggl
 - AWS credentials per client
 - npm registries per org
 
-`tp` wraps all of this into named profiles. One command to switch context completely.
+`xtp` wraps all of this into named profiles. One command to switch context completely.
 
 ## Install
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-uv tool install --editable /path/to/terminal-profiles
+uv tool install /path/to/x-terminal-profiles
 ```
 
 Verify:
 
 ```bash
-tp --version
+xtp --version
 ```
 
 ## Quick start
 
 ```bash
 # 1. Create a profile (interactive)
-tp create acme
+xtp create acme
 
 # 2. Set up GitHub auth for the profile
-tp init-gh acme
+xtp init-gh acme
 
 # 3. Verify everything is configured
-tp verify acme
+xtp verify acme
 
 # 4. Activate the profile
-tp shell acme
+xtp shell acme
 
 # You're now in an isolated shell. All git/gh/claude commands
 # use the acme identity. Type 'exit' to return.
@@ -51,26 +51,26 @@ tp shell acme
 
 | Command | Description |
 |---|---|
-| `tp create <name>` | Create a new profile interactively |
-| `tp shell <name>` | Launch isolated shell with profile environment |
-| `tp list` | List all profiles (marks active with `*`) |
-| `tp show <name>` | Display profile config and environment variables |
-| `tp edit <name>` | Open profile.toml in `$EDITOR` |
-| `tp delete <name>` | Delete a profile (with confirmation) |
-| `tp current` | Print active profile name |
-| `tp verify <name>` | Health check: validate profile setup |
-| `tp init-gh <name>` | Authenticate GitHub CLI for a profile |
-| `tp init-ssh <name>` | Generate SSH key pair for a profile |
-| `tp chrome-profiles` | List available Chrome profiles on the system |
+| `xtp create <name>` | Create a new profile interactively |
+| `xtp shell <name>` | Launch isolated shell with profile environment |
+| `xtp list` | List all profiles (marks active with `*`) |
+| `xtp show <name>` | Display profile config and environment variables |
+| `xtp edit <name>` | Open profile.toml in `$EDITOR` |
+| `xtp delete <name>` | Delete a profile (with confirmation) |
+| `xtp current` | Print active profile name |
+| `xtp verify <name>` | Health check: validate profile setup |
+| `xtp init-gh <name>` | Authenticate GitHub CLI for a profile |
+| `xtp init-ssh <name>` | Generate SSH key pair for a profile |
+| `xtp chrome-profiles` | List available Chrome profiles on the system |
 
 ## What gets isolated
 
-When you run `tp shell <name>`, these environment variables are set:
+When you run `xtp shell <name>`, these environment variables are set:
 
 | Variable | Purpose |
 |---|---|
-| `TP_PROFILE` | Active profile name |
-| `TP_PROFILE_DIR` | Path to profile directory |
+| `XTP_PROFILE` | Active profile name |
+| `XTP_PROFILE_DIR` | Path to profile directory |
 | `CLAUDE_CONFIG_DIR` | Isolated Claude Code config, history, and skills |
 | `GIT_AUTHOR_NAME` / `GIT_COMMITTER_NAME` | Git identity |
 | `GIT_AUTHOR_EMAIL` / `GIT_COMMITTER_EMAIL` | Git identity |
@@ -82,10 +82,10 @@ When you run `tp shell <name>`, these environment variables are set:
 
 ## Profile structure
 
-Profiles live in `~/.config/tp/profiles/<name>/`:
+Profiles live in `~/.config/xtp/profiles/<name>/`:
 
 ```
-~/.config/tp/profiles/acme/
+~/.config/xtp/profiles/acme/
   profile.toml       # Profile configuration
   browser.sh         # Auto-generated Chrome wrapper
   claude/            # Claude Code config, history, skills, memory
@@ -132,10 +132,10 @@ Each profile gets its own isolated Claude Code environment: separate conversatio
 
 Claude Code stores its onboarding flag in `~/.claude.json` (a file in your **home directory root**, not inside `~/.claude/`). When `CLAUDE_CONFIG_DIR` is overridden, Claude looks for `.claude.json` inside that directory instead.
 
-`tp create` automatically seeds this file into new profiles so Claude doesn't show the first-time setup wizard. If you need to seed it manually for an existing profile:
+`xtp create` automatically seeds this file into new profiles so Claude doesn't show the first-time setup wizard. If you need to seed it manually for an existing profile:
 
 ```bash
-cp ~/.claude.json ~/.config/tp/profiles/<name>/claude/.claude.json
+cp ~/.claude.json ~/.config/xtp/profiles/<name>/claude/.claude.json
 ```
 
 ### Migrating an existing Claude setup
@@ -144,16 +144,16 @@ To bring your full Claude history, skills, and memory into a profile:
 
 ```bash
 # Sync everything from your default Claude config
-rsync -a ~/.claude/ ~/.config/tp/profiles/<name>/claude/
+rsync -a ~/.claude/ ~/.config/xtp/profiles/<name>/claude/
 
 # Copy the onboarding state
-cp ~/.claude.json ~/.config/tp/profiles/<name>/claude/.claude.json
+cp ~/.claude.json ~/.config/xtp/profiles/<name>/claude/.claude.json
 ```
 
 ### Skills
 
 Claude Code skills can be:
-- **Global** (per profile): placed in `~/.config/tp/profiles/<name>/claude/skills/`
+- **Global** (per profile): placed in `~/.config/xtp/profiles/<name>/claude/skills/`
 - **Project-specific**: placed in `<project>/.claude/skills/`
 
 Global skills are available in every project when using that profile. Project-specific skills stay with the project regardless of which profile is active.
@@ -163,24 +163,24 @@ Global skills are available in every project when using that profile. Project-sp
 Add this to your `~/.zshrc` (after `source $ZSH/oh-my-zsh.sh` if using oh-my-zsh) to show the active profile in the iTerm2 tab:
 
 ```zsh
-# Show active tp profile in iTerm2 tab (title + color)
-if [[ -n "$TP_PROFILE" ]]; then
-  function _tp_title_precmd() {
-    echo -ne "\e]1;tp:${TP_PROFILE}\a"
+# Show active xtp profile in iTerm2 tab (title + color)
+if [[ -n "$XTP_PROFILE" ]]; then
+  function _xtp_title_precmd() {
+    echo -ne "\e]1;xtp:${XTP_PROFILE}\a"
   }
-  precmd_functions+=(_tp_title_precmd)
+  precmd_functions+=(_xtp_title_precmd)
   # Teal tab color (adjust RGB values to taste)
   echo -ne "\e]6;1;bg;red;brightness;30\a\e]6;1;bg;green;brightness;120\a\e]6;1;bg;blue;brightness;180\a"
 fi
 ```
 
-This sets the tab title to `tp:<profile>` and colors the tab. The color resets automatically when you `exit` the profile shell.
+This sets the tab title to `xtp:<profile>` and colors the tab. The color resets automatically when you `exit` the profile shell.
 
-For other terminals, you can use `$TP_PROFILE` in your prompt:
+For other terminals, you can use `$XTP_PROFILE` in your prompt:
 
 ```zsh
-if [[ -n "$TP_PROFILE" ]]; then
-  RPROMPT="%F{cyan}[tp:$TP_PROFILE]%f"
+if [[ -n "$XTP_PROFILE" ]]; then
+  RPROMPT="%F{cyan}[xtp:$XTP_PROFILE]%f"
 fi
 ```
 
@@ -188,8 +188,8 @@ fi
 
 ```bash
 # Install from local path
-uv tool install /path/to/terminal-profiles
+uv tool install /path/to/x-terminal-profiles
 
 # After making ANY code changes, reinstall (required — changes don't auto-reload)
-uv tool install --reinstall /path/to/terminal-profiles
+uv tool install --reinstall /path/to/x-terminal-profiles
 ```

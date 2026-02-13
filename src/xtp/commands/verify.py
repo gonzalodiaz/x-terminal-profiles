@@ -6,8 +6,8 @@ import os
 import subprocess
 from pathlib import Path
 
-from tp import config
-from tp.commands.chrome import get_chrome_profiles
+from xtp import config
+from xtp.commands.chrome import get_chrome_profiles
 
 PASS = "\u2713"  # ✓
 FAIL = "\u2717"  # ✗

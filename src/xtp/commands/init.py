@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tp import config
+from xtp import config
 
 
 def run_gh(name: str) -> None:

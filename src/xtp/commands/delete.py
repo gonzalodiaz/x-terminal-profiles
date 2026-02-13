@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shutil
 
-from tp import config
+from xtp import config
 
 
 def run(name: str) -> None:

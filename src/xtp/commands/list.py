@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import os
 
-from tp import config
+from xtp import config
 
 
 def run() -> None:
     profiles = config.list_profiles()
     if not profiles:
-        print("No profiles found. Create one with: tp create <name>")
+        print("No profiles found. Create one with: xtp create <name>")
         return
 
-    active = os.environ.get("TP_PROFILE", "")
+    active = os.environ.get("XTP_PROFILE", "")
     for name in profiles:
         try:
             cfg = config.load_profile(name)

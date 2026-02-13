@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 
-from tp import config
+from xtp import config
 
 
 def run(name: str) -> None:
@@ -26,7 +26,7 @@ def run(name: str) -> None:
     # gh auth should come from GH_CONFIG_DIR/hosts.yml instead.
     full_env.pop("GITHUB_TOKEN", None)
 
-    print(f"Entering tp shell: {name}")
+    print(f"Entering xtp shell: {name}")
     print(f"Type 'exit' to return to your normal shell.\n")
 
     # Set iTerm2 tab title to the profile name

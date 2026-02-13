@@ -5,8 +5,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from tp import config
-from tp.commands.chrome import get_chrome_profiles
+from xtp import config
+from xtp.commands.chrome import get_chrome_profiles
 
 
 def run(name: str) -> None:
@@ -81,9 +81,9 @@ def run(name: str) -> None:
 
     print(f"\nProfile '{name}' created at {config.profile_dir(name)}")
     print(f"\nNext steps:")
-    print(f"  tp init-gh {name}    # authenticate GitHub CLI")
-    print(f"  tp verify {name}     # check everything is set up")
-    print(f"  tp shell {name}      # activate the profile")
+    print(f"  xtp init-gh {name}    # authenticate GitHub CLI")
+    print(f"  xtp verify {name}     # check everything is set up")
+    print(f"  xtp shell {name}      # activate the profile")
     print()
     print("Tip: See the README for iTerm2 tab integration (title + color).")
 
