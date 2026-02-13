@@ -158,12 +158,12 @@ Claude Code skills can be:
 
 Global skills are available in every project when using that profile. Project-specific skills stay with the project regardless of which profile is active.
 
-## iTerm2 integration
+## Shell integration
 
-Add this to your `~/.zshrc` (after `source $ZSH/oh-my-zsh.sh` if using oh-my-zsh) to show the active profile in the iTerm2 tab:
+Add this to your `~/.zshrc` (after `source $ZSH/oh-my-zsh.sh` if using oh-my-zsh) to show the active profile in both the shell prompt and the iTerm2 tab:
 
 ```zsh
-# Show active xtp profile in iTerm2 tab (title + color)
+# Show active xtp profile in iTerm2 tab (title + color) and shell prompt
 if [[ -n "$XTP_PROFILE" ]]; then
   function _xtp_title_precmd() {
     echo -ne "\e]1;xtp:${XTP_PROFILE}\a"
@@ -171,18 +171,11 @@ if [[ -n "$XTP_PROFILE" ]]; then
   precmd_functions+=(_xtp_title_precmd)
   # Teal tab color (adjust RGB values to taste)
   echo -ne "\e]6;1;bg;red;brightness;30\a\e]6;1;bg;green;brightness;120\a\e]6;1;bg;blue;brightness;180\a"
+  RPROMPT="%F{cyan}[xtp:${XTP_PROFILE}]%f"
 fi
 ```
 
-This sets the tab title to `xtp:<profile>` and colors the tab. The color resets automatically when you `exit` the profile shell.
-
-For other terminals, you can use `$XTP_PROFILE` in your prompt:
-
-```zsh
-if [[ -n "$XTP_PROFILE" ]]; then
-  RPROMPT="%F{cyan}[xtp:$XTP_PROFILE]%f"
-fi
-```
+This sets the tab title to `xtp:<profile>`, colors the tab, and shows `[xtp:<profile>]` in cyan on the right side of your prompt. Everything resets automatically when you `exit` the profile shell.
 
 ## Development
 
