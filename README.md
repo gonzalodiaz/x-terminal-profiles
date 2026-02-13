@@ -165,6 +165,7 @@ Add this to your `~/.zshrc` (after `source $ZSH/oh-my-zsh.sh` if using oh-my-zsh
 ```zsh
 # Show active xtp profile in iTerm2 tab (title + color) and shell prompt
 if [[ -n "$XTP_PROFILE" ]]; then
+  DISABLE_AUTO_TITLE=true
   function _xtp_title_precmd() {
     echo -ne "\e]1;xtp:${XTP_PROFILE}\a"
   }
