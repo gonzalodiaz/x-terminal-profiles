@@ -98,6 +98,15 @@ class TestBuildEnv:
         env = config.build_env("npmtest")
         assert env["NPM_CONFIG_USERCONFIG"].endswith("npmrc")
 
+    def test_gcloud_section(self, fake_profile):
+        fake_profile("gctest", {
+            "gcloud": {"config_dir": "~/.config/gcloud-gctest"},
+        })
+        env = config.build_env("gctest")
+        assert "CLOUDSDK_CONFIG" in env
+        assert "~" not in env["CLOUDSDK_CONFIG"]
+        assert env["CLOUDSDK_CONFIG"].endswith("gcloud-gctest")
+
     def test_custom_env_vars(self, fake_profile):
         fake_profile("custom", {
             "env": {"MY_VAR": "hello", "MY_PATH": "~/stuff"},

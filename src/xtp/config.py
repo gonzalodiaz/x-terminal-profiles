@@ -117,6 +117,11 @@ def build_env(name: str) -> dict[str, str]:
     if npm.get("isolate"):
         env["NPM_CONFIG_USERCONFIG"] = str(pdir / "npmrc")
 
+    # gcloud
+    gcloud_dir = cfg.get("gcloud", {}).get("config_dir")
+    if gcloud_dir:
+        env["CLOUDSDK_CONFIG"] = str(Path(gcloud_dir).expanduser())
+
     # Custom env vars
     for key, value in cfg.get("env", {}).items():
         env[key] = str(Path(value).expanduser()) if "~" in str(value) else str(value)
